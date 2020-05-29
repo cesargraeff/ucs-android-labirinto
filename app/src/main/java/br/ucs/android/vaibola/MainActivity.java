@@ -1,6 +1,4 @@
-package br.ucs.android.exemplocanvas;
-
-import androidx.appcompat.app.AppCompatActivity;
+package br.ucs.android.vaibola;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -8,15 +6,10 @@ import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
-
-import static android.content.Context.SENSOR_SERVICE;
 
 public class MainActivity extends Activity {
 

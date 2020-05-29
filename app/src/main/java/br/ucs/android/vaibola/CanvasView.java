@@ -1,4 +1,4 @@
-package br.ucs.android.exemplocanvas;
+package br.ucs.android.vaibola;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,9 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.graphics.Path;
 
 public class CanvasView extends View {
 

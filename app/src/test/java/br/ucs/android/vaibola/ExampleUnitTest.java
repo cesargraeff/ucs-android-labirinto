@@ -1,4 +1,4 @@
-package br.ucs.android.exemplocanvas;
+package br.ucs.android.vaibola;
 
 import org.junit.Test;
 

@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical" >
 
-    <br.ucs.android.exemplocanvas.CanvasView
+    <br.ucs.android.vaibola.CanvasView
         android:id="@+id/signature_canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
