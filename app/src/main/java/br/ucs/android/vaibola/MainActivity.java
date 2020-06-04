@@ -36,26 +36,24 @@ public class MainActivity extends Activity {
 
         customCanvas.setmX(point.x);
         customCanvas.setmY(point.y);
+        customCanvas.setF1();
     }
 
-    private class AccelerometerSensor implements  SensorEventListener {
+    private class AccelerometerSensor implements SensorEventListener {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float currY = event.values[0];
-            float currX =event.values[1];
+            float currX = event.values[1];
             float currZ = event.values[2];
 
 
-            if(currX > 2 || currX < -2){
-                if(customCanvas.getCurrX() > 0 && customCanvas.getCurrX() < point.x){
-                    customCanvas.updateX((int)currX);
-                }
+            if (currX > 2 || currX < -2) {
+                customCanvas.updateX((int) currX);
             }
 
-            if(currY > 2.5 || currY < -2.5){
-//                if(customCanvas.getCurrY() > 0 && customCanvas.getCurrY() < point.y)
-                customCanvas.updateY((int)currY);
-                System.out.println(String.format("%.2f", currY));
+            if (currY > 2.5 || currY < -2.5) {
+                System.out.println(currY);
+                customCanvas.updateY((int) currY);
             }
 
 

@@ -5,13 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class CanvasView extends View {
 
-    private Bitmap mBitmap;
-    private Canvas mCanvas;
+    private int radius = 30;
+    private int[][] m;
+    private int l;
+    private int c;
     Context context;
 
 
@@ -37,42 +40,97 @@ public class CanvasView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        // your Canvas will draw onto the defined Bitmap
-        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mBitmap);
+//        // your Canvas will draw onto the defined Bitmap
+//        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+//        mCanvas = new Canvas(mBitmap);
     }
 
     // override onDraw
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawF1(canvas);
+        drawBord(canvas);
 
-        // Retângulo
-        Paint p1 = new Paint();
-        p1.setColor(Color.BLUE);
-        canvas.drawRect(100, 100, 200, 250, p1);
+        Paint player = new Paint();
+        player.setColor(circleColor);
+        canvas.drawCircle(currX, currY, radius, player);
 
-        // Círculos
-        Paint p2 = new Paint();
-        p2.setColor(Color.YELLOW);
-        canvas.drawCircle(currX, currY, 35, p2);
+    }
 
-        p2.setColor(circleColor);
-        canvas.drawCircle(600, 300, 80, p2);
+    private void drawBord(Canvas canvas) {
+        Paint p = new Paint();
+        p.setColor(Color.MAGENTA);
+        canvas.drawRect(0, 0, 50, mY, p);
+        canvas.drawRect((c - 5) * 10, 0, mX, mY, p);
 
-        // Texto
-        Paint p3 = new Paint();
-        p3.setTextSize(48f);
-        p3.setColor(Color.GREEN);
-        canvas.drawText("Texto no canvas", 100, 400, p3);
+        canvas.drawRect(0, 0, mX, 50, p);
+        canvas.drawRect(0, (l - 5) * 10, mX, mY, p);
+    }
 
-//        // Linhas
-//        Paint p4 = new Paint();
-//        p4.setStrokeWidth(5f);
-//        p4.setColor(Color.RED);
-//        canvas.drawLine(100,500, 400, 550,p4);
-//        canvas.drawLine(100,500, 420, 650,p4);
-//        canvas.drawLine(100,500, 500, 800,p4);
+    public void setF1() {
+        l = mY / 10;
+        c = mX / 10;
+        m = new int[l][c];
+
+        bord();
+
+        for(int i=5; i<l-10; i++){
+            for(int j=5; j< c-10; j++){
+                if(j % 7 == 0){
+                    m[i][j]= 1;
+                }
+            }
+        }
+
+    }
+
+    private void bord() {
+        for (int i = 0; i < l; i++) {
+            m[i][0] = 2;
+            m[i][1] = 2;
+            m[i][2] = 2;
+            m[i][3] = 2;
+            m[i][4] = 2;
+
+
+            m[i][c - 1] = 2;
+            m[i][c - 2] = 2;
+            m[i][c - 3] = 2;
+            m[i][c - 4] = 2;
+            m[i][c- 5] = 2;
+        }
+
+        for (int i = 0; i < c; i++) {
+            m[0][i] = 2;
+            m[1][i] = 2;
+            m[2][i] = 2;
+            m[3][i] = 2;
+            m[4][i] = 2;
+
+            m[l - 1][i] = 2;
+            m[l - 2][i] = 2;
+            m[l - 3][i] = 2;
+            m[l - 4][i] = 2;
+            m[l - 5][i] = 2;
+        }
+    }
+
+    private void drawF1(Canvas canvas) {
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+
+        for (int i = 5; i < l - 5; i++) {
+            int top = i * 10;
+            int bottom = top + 10;
+            for (int j = 5; j < c - 5; j++) {
+                int left = j * 10;
+                int right = left + 10;
+                if (m[i][j] == 1) {
+                    canvas.drawRect(left, top, right, bottom, p);
+                }
+            }
+        }
 
 
     }
@@ -102,15 +160,37 @@ public class CanvasView extends View {
     }
 
     public void updateY(int y) {
-        if (currY + y > 0 && currY + y < mY) {
+        int mx = (int) currX/10;
+        int my;
+        if(y < 0){
+            my = (int) (currY + y - radius) / 10;
+        }
+        else {
+            my = (int) (currY + y + radius) / 10;
+        }
+
+        if (m[my][mx] == 0) {
             this.currY += y;
         }
     }
 
     public void updateX(int x) {
-        if (currX + x > 0 && currX + x < mX) {
+        // esq
+        int mx;
+        int my = (int) (currY / 10);
+
+        if (x < 0) {
+            mx = (int) (currX + x - radius) / 10;
+        } else {
+            mx = (int) (currX + x + radius) / 10;
+        }
+
+        if (m[my][mx] == 0) {
             this.currX += x;
         }
+//        if (currX + x > radius && currX + x < mX - radius) {
+//            this.currX += x;
+//        }
     }
 
     public int getmX() {
