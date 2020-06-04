@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.WindowManager;
@@ -14,9 +15,9 @@ import android.view.WindowManager;
 public class MainActivity extends Activity {
 
     private CanvasView customCanvas;
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
     private Point point = new Point();
+    private MediaPlayer mp;
+    private boolean grilo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +27,16 @@ public class MainActivity extends Activity {
         WindowManager wm = getWindowManager();
         Display d = wm.getDefaultDisplay();
         d.getSize(point);
-
-
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(new AccelerometerSensor(), mAccelerometer,
                 SensorManager.SENSOR_DELAY_GAME);
 
         customCanvas.setmX(point.x);
         customCanvas.setmY(point.y);
         customCanvas.setF1();
+        customCanvas.setFase(1);
     }
 
     private class AccelerometerSensor implements SensorEventListener {
@@ -44,16 +44,20 @@ public class MainActivity extends Activity {
         public void onSensorChanged(SensorEvent event) {
             float currY = event.values[0];
             float currX = event.values[1];
-            float currZ = event.values[2];
-
 
             if (currX > 2 || currX < -2) {
-                customCanvas.updateX((int) currX);
+                if (customCanvas.isValidX((int) currX))
+                    customCanvas.updateX((int) currX);
             }
 
             if (currY > 2.5 || currY < -2.5) {
-                System.out.println(currY);
-                customCanvas.updateY((int) currY);
+                if (customCanvas.isValidY((int) currY))
+                    customCanvas.updateY((int) currY);
+            }
+
+            if ((customCanvas.getCurrX() >= 270 && customCanvas.getCurrX() <= 330) && (customCanvas.getCurrY() >= 370 && customCanvas.getCurrY() <= 440)) {
+                customCanvas.setFase(2);
+                grilo();
             }
 
 
@@ -68,6 +72,33 @@ public class MainActivity extends Activity {
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        customCanvas.setFase(1);
+    }
+
+    private void grilo() {
+
+        if (!grilo) {
+            grilo = true;
+            mp = MediaPlayer.create(getApplicationContext(), R.raw.grilo);
+
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    grilo = false;
+                    mp.release();
+                }
+
+            });
+
+            mp.start();
         }
 
 

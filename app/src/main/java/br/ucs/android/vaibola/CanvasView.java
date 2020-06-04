@@ -11,10 +11,11 @@ import android.view.View;
 
 public class CanvasView extends View {
 
-    private int radius = 30;
+    private int radius = 25;
     private int[][] m;
     private int l;
     private int c;
+    private int fase;
     Context context;
 
 
@@ -49,12 +50,23 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawF1(canvas);
-        drawBord(canvas);
-
+        switch (fase){
+            case 1:
+                Paint p = new Paint();
+                p.setColor(Color.BLACK);
+                drawF1(canvas);
+                drawBord(canvas);
+                canvas.drawCircle(300, 400, radius + 30, p);
+                break;
+            case 2:
+                break;
+            default:
+        }
         Paint player = new Paint();
         player.setColor(circleColor);
         canvas.drawCircle(currX, currY, radius, player);
+
+
 
     }
 
@@ -75,10 +87,12 @@ public class CanvasView extends View {
 
         bord();
 
-        for(int i=5; i<l-10; i++){
-            for(int j=5; j< c-10; j++){
-                if(j % 7 == 0){
-                    m[i][j]= 1;
+        for (int i = 5; i < l - 15; i++) {
+            for (int j = 5; j < c - 15; j++) {
+                if (j % 40 == 0) {
+                    m[i][j] = 1;
+                    m[i][j + 1] = 1;
+                    m[i][j + 2] = 1;
                 }
             }
         }
@@ -135,31 +149,23 @@ public class CanvasView extends View {
 
     }
 
-    public float getCurrX() {
-        return currX;
-    }
-
-    public void setCurrX(float currX) {
-        this.currX = currX;
-    }
-
-    public float getCurrY() {
-        return currY;
-    }
-
-    public void setCurrY(float currY) {
-        this.currY = currY;
-    }
-
-    public int getCircleColor() {
-        return circleColor;
-    }
-
     public void setCircleColor(int circleColor) {
         this.circleColor = circleColor;
     }
 
     public void updateY(int y) {
+        this.currY += y;
+    }
+
+    public void updateX(int x) {
+        this.currX += x;
+    }
+
+    public boolean isValidMov(int x, int y){
+        return isValidX(x) && isValidY(y);
+    }
+
+    public boolean isValidY(int y) {
         int mx = (int) currX/10;
         int my;
         if(y < 0){
@@ -170,11 +176,12 @@ public class CanvasView extends View {
         }
 
         if (m[my][mx] == 0) {
-            this.currY += y;
+           return true;
         }
+        return false;
     }
 
-    public void updateX(int x) {
+    public boolean isValidX(int x) {
         // esq
         int mx;
         int my = (int) (currY / 10);
@@ -186,26 +193,29 @@ public class CanvasView extends View {
         }
 
         if (m[my][mx] == 0) {
-            this.currX += x;
+           return true;
         }
-//        if (currX + x > radius && currX + x < mX - radius) {
-//            this.currX += x;
-//        }
-    }
 
-    public int getmX() {
-        return mX;
+        return false;
     }
 
     public void setmX(int mX) {
         this.mX = mX;
     }
 
-    public int getmY() {
-        return mY;
-    }
-
     public void setmY(int mY) {
         this.mY = mY;
+    }
+
+    public float getCurrX() {
+        return currX;
+    }
+
+    public float getCurrY() {
+        return currY;
+    }
+
+    public void setFase(int fase) {
+        this.fase = fase;
     }
 }
