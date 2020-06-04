@@ -24,6 +24,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        grilo();
+
         WindowManager wm = getWindowManager();
         Display d = wm.getDefaultDisplay();
         d.getSize(point);

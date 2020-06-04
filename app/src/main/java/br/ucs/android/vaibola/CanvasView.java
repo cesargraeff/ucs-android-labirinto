@@ -59,6 +59,7 @@ public class CanvasView extends View {
                 canvas.drawCircle(300, 400, radius + 30, p);
                 break;
             case 2:
+                drawBord(canvas);
                 break;
             default:
         }
@@ -78,6 +79,12 @@ public class CanvasView extends View {
 
         canvas.drawRect(0, 0, mX, 50, p);
         canvas.drawRect(0, (l - 5) * 10, mX, mY, p);
+
+        Paint p3 = new Paint();
+        p3.setTextSize(30);
+        p3.setColor(Color.GREEN);
+        canvas.drawText("Fase: " + fase,30, 30, p3);
+        canvas.drawText("Para reiniciar aperte voltar", 30, mY - 25, p3 );
     }
 
     public void setF1() {
