@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //        vaiSom();
+        vaiSom();
 
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
         WindowManager wm = getWindowManager();
