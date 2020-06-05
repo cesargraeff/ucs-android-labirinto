@@ -70,7 +70,10 @@ public class MainActivity extends Activity {
                 }
             }
 
-            if ((customCanvas.getCurrX() >= 270 && customCanvas.getCurrX() <= 330) && (customCanvas.getCurrY() >= 370 && customCanvas.getCurrY() <= 440)) {
+            if (customCanvas.getCurrX() >= customCanvas.getMinFx() && customCanvas.getCurrX() <= customCanvas.getMaxFx()
+                    && customCanvas.getCurrY() >= customCanvas.getMinFy() && customCanvas.getCurrY() <= customCanvas.getMaxFy()) {
+                customCanvas.setCurrX(100);
+                customCanvas.setCurrY(100);
                 customCanvas.setFase(2);
                 vaiSom();
             }
@@ -102,7 +105,7 @@ public class MainActivity extends Activity {
 
         if (!som) {
             som = true;
-            mp = MediaPlayer.create(getApplicationContext(), R.raw.grilo);
+            mp = MediaPlayer.create(getApplicationContext(), R.raw.tetra);
 
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 

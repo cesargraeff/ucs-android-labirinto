@@ -12,6 +12,7 @@ import android.view.View;
 public class CanvasView extends View {
 
     private int radius = 25;
+    private float mr = 1.5f;
     private int[][] m;
     private int l;
     private int c;
@@ -28,6 +29,9 @@ public class CanvasView extends View {
     private int mX; // tamnanho tele
     private int mY; // tamnanho tele
 
+    private float fx;
+    private float fy;
+
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
         context = c;
@@ -43,7 +47,7 @@ public class CanvasView extends View {
                 p.setColor(Color.BLACK);
                 drawF1(canvas);
                 drawBord(canvas);
-                canvas.drawCircle(300, 400, radius + 30, p);
+                canvas.drawCircle(fx,fy,radius * mr,p);
                 break;
             case 2:
                 drawBord(canvas);
@@ -78,6 +82,9 @@ public class CanvasView extends View {
         m = new int[l][c];
 
         bord();
+
+        this.fx = (c - 5) * 10 - radius * mr;
+        this.fy = (l - 5) * 10 - radius * mr;
 
         for (int i = 5; i < l - 15; i++) {
             for (int j = 5; j < c - 15; j++) {
@@ -209,5 +216,29 @@ public class CanvasView extends View {
 
     public void setFase(int fase) {
         this.fase = fase;
+    }
+
+    public float getMaxFx(){
+        return this.fx + radius * mr;
+    }
+
+    public float getMinFx(){
+        return this.fx - radius * mr;
+    }
+
+    public float getMaxFy(){
+        return this.fy + mr *radius;
+    }
+
+    public float getMinFy(){
+        return this.fy - mr * radius;
+    }
+
+    public void setCurrX(float currX) {
+        this.currX = currX;
+    }
+
+    public void setCurrY(float currY) {
+        this.currY = currY;
     }
 }
