@@ -1,6 +1,7 @@
 package br.ucs.android.vaibola;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.hardware.Sensor;
@@ -9,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -17,19 +19,21 @@ public class MainActivity extends Activity {
     private CanvasView customCanvas;
     private Point point = new Point();
     private MediaPlayer mp;
-    private boolean grilo;
+    private boolean som;
+    private Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        grilo();
+        //        vaiSom();
 
+        customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
         WindowManager wm = getWindowManager();
         Display d = wm.getDefaultDisplay();
         d.getSize(point);
-        customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
+
         SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(new AccelerometerSensor(), mAccelerometer,
@@ -37,8 +41,11 @@ public class MainActivity extends Activity {
 
         customCanvas.setmX(point.x);
         customCanvas.setmY(point.y);
+
         customCanvas.setF1();
         customCanvas.setFase(1);
+
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     private class AccelerometerSensor implements SensorEventListener {
@@ -48,18 +55,24 @@ public class MainActivity extends Activity {
             float currX = event.values[1];
 
             if (currX > 2 || currX < -2) {
-                if (customCanvas.isValidX((int) currX))
+                if (customCanvas.isValidX((int) currX)) {
                     customCanvas.updateX((int) currX);
+                } else {
+                    v.vibrate(10);
+                }
             }
 
             if (currY > 2.5 || currY < -2.5) {
-                if (customCanvas.isValidY((int) currY))
+                if (customCanvas.isValidY((int) currY)) {
                     customCanvas.updateY((int) currY);
+                } else {
+                    v.vibrate(10);
+                }
             }
 
             if ((customCanvas.getCurrX() >= 270 && customCanvas.getCurrX() <= 330) && (customCanvas.getCurrY() >= 370 && customCanvas.getCurrY() <= 440)) {
                 customCanvas.setFase(2);
-                grilo();
+                vaiSom();
             }
 
 
@@ -80,21 +93,22 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        // TODO ARRUMAR ISSO, para forma de gente
 //        super.onBackPressed();
         customCanvas.setFase(1);
     }
 
-    private void grilo() {
+    private void vaiSom() {
 
-        if (!grilo) {
-            grilo = true;
+        if (!som) {
+            som = true;
             mp = MediaPlayer.create(getApplicationContext(), R.raw.grilo);
 
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    grilo = false;
+                    som = false;
                     mp.release();
                 }
 

@@ -17,33 +17,20 @@ public class CanvasView extends View {
     private int c;
     private int fase;
     Context context;
-
-
     // Record current ball horizontal ordinate.
     private float currX = 100;
-
     // Record current ball vertical ordinate
     private float currY = 100;
 
     // This is the circle color.
     private int circleColor = Color.GREEN;
 
-    private int mX;
-    private int mY;
+    private int mX; // tamnanho tele
+    private int mY; // tamnanho tele
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
         context = c;
-    }
-
-    // override onSizeChanged
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-//        // your Canvas will draw onto the defined Bitmap
-//        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-//        mCanvas = new Canvas(mBitmap);
     }
 
     // override onDraw
@@ -63,12 +50,10 @@ public class CanvasView extends View {
                 break;
             default:
         }
+
         Paint player = new Paint();
         player.setColor(circleColor);
         canvas.drawCircle(currX, currY, radius, player);
-
-
-
     }
 
     private void drawBord(Canvas canvas) {
