@@ -1,11 +1,9 @@
 package br.ucs.android.vaibola;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -39,24 +37,24 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        switch (fase){
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+
+        Paint p3 = new Paint();
+        p3.setColor(Color.BLACK);
+        p3.setTextSize(50);
+
+        switch (fase) {
             case 1:
-                Paint p = new Paint();
-                p.setColor(Color.BLACK);
-                drawF1(canvas);
-                drawBord(canvas);
-                canvas.drawCircle(fx,fy,radius * mr,p);
-                break;
             case 2:
-                drawBord(canvas);
-                // TODO ADD LAYOUT FASE 2
-                break;
             case 3:
+                drawMatrix(canvas);
                 drawBord(canvas);
-                // TODO ADD LAYOUT FASE 3
+                canvas.drawCircle(fx, fy, radius * mr, p);
                 break;
             default:
                 drawBord(canvas);
+                canvas.drawText("PARA REINICIAR APERTE VOLTAR", 30, mY/2, p3);
         }
 
         Paint player = new Paint();
@@ -76,8 +74,8 @@ public class CanvasView extends View {
         Paint p3 = new Paint();
         p3.setTextSize(30);
         p3.setColor(Color.GREEN);
-        canvas.drawText("Fase: " + fase,30, 30, p3);
-        canvas.drawText("Para reiniciar aperte voltar", 30, mY - 25, p3 );
+        canvas.drawText("Fase: " + fase, 30, 30, p3);
+        canvas.drawText("PARA REINICIAR APERTE VOLTAR", 30, mY - 25, p3);
     }
 
     public void setMatrixFase(int fase) {
@@ -85,6 +83,7 @@ public class CanvasView extends View {
         this.currY = (100);
 
         this.fase = fase;
+        int i;
         switch (fase) {
             case 1:
                 this.clearM();
@@ -93,27 +92,87 @@ public class CanvasView extends View {
                 this.fx = (c - 5) * 10 - radius * mr;
                 this.fy = (l - 5) * 10 - radius * mr;
 
-                for (int i = 5; i < l - 15; i++) {
-                    for (int j = 5; j < c - 15; j++) {
-                        if (j % 40 == 0) {
-                            m[i][j] = 1;
-                            m[i][j + 1] = 1;
-                            m[i][j + 2] = 1;
-                        }
-                    }
+                i = 15;
+                for (int j = 5; j < l - 15; j++) {
+                    m[j][i] = 1;
+                    m[j][i + 1] = 1;
+                    m[j][i + 2] = 1;
                 }
+
+                i = c / 2 - 2;
+                for (int j = 20; j < l; j++) {
+                    m[j][i] = 1;
+                    m[j][i + 1] = 1;
+                    m[j][i + 2] = 1;
+                }
+
+                i = c - 30;
+                for (int j = 5; j < l - 15; j++) {
+                    m[j][i] = 1;
+                    m[j][i + 1] = 1;
+                    m[j][i + 2] = 1;
+                }
+
                 break;
             case 2:
                 this.clearM();
                 this.bord();
 
-                // TODO ADD MATRIZ FASE 2
+                this.fx = (c - 5) * 10 - radius * mr;
+                this.fy = (l - 5) * 10 - radius * mr;
+
+                i = 15;
+                for (int j = 5; j < c - 15; j++) {
+                    m[i][j] = 1;
+                    m[i + 1][j] = 1;
+                    m[i + 2][j] = 1;
+                }
+
+                i = l / 2 - 2;
+                for (int j = 15; j < c - 1; j++) {
+                    m[i][j] = 1;
+                    m[i + 1][j] = 1;
+                    m[i + 2][j] = 1;
+                }
+
+                i = l - 20;
+                for (int j = 5; j < c - 15; j++) {
+                    m[i][j] = 1;
+                    m[i + 1][j] = 1;
+                    m[i + 2][j] = 1;
+                }
+
                 break;
             case 3:
                 this.clearM();
                 this.bord();
 
-                // TODO ADD MATRIZ FASE 3
+                this.currY = mY - 100;
+                this.currX = 100;
+
+                this.fx = (c - 5) * 10 - radius * mr;
+                this.fy = (l - 5) * 10 - radius * mr;
+
+                i = 15;
+                for (int j = 15; j < l; j++) {
+                    m[j][i] = 1;
+                    m[j][i + 1] = 1;
+                    m[j][i + 2] = 1;
+                }
+
+                i = 15;
+                for (int j = 15; j < c - 20; j++) {
+                    m[i][j] = 1;
+                    m[i + 1][j] = 1;
+                    m[i + 2][j] = 1;
+                }
+
+                i = c - 20;
+                for (int j = 15; j < l; j++) {
+                    m[j][i] = 1;
+                    m[j][i + 1] = 1;
+                    m[j][i + 2] = 1;
+                }
                 break;
             default:
                 this.clearM();
@@ -136,7 +195,7 @@ public class CanvasView extends View {
             m[i][c - 2] = 2;
             m[i][c - 3] = 2;
             m[i][c - 4] = 2;
-            m[i][c- 5] = 2;
+            m[i][c - 5] = 2;
         }
 
         for (int i = 0; i < c; i++) {
@@ -154,7 +213,7 @@ public class CanvasView extends View {
         }
     }
 
-    private void drawF1(Canvas canvas) {
+    private void drawMatrix(Canvas canvas) {
         Paint p = new Paint();
         p.setColor(Color.BLACK);
 
@@ -185,22 +244,21 @@ public class CanvasView extends View {
         this.currX += x;
     }
 
-    public boolean isValidMov(int x, int y){
+    public boolean isValidMov(int x, int y) {
         return isValidX(x) && isValidY(y);
     }
 
     public boolean isValidY(int y) {
-        int mx = (int) currX/10;
+        int mx = (int) currX / 10;
         int my;
-        if(y < 0){
+        if (y < 0) {
             my = (int) (currY + y - radius) / 10;
-        }
-        else {
+        } else {
             my = (int) (currY + y + radius) / 10;
         }
 
         if (m[my][mx] == 0) {
-           return true;
+            return true;
         }
         return false;
     }
@@ -217,7 +275,7 @@ public class CanvasView extends View {
         }
 
         if (m[my][mx] == 0) {
-           return true;
+            return true;
         }
 
         return false;
@@ -239,19 +297,19 @@ public class CanvasView extends View {
         return currY;
     }
 
-    public float getMaxFx(){
+    public float getMaxFx() {
         return this.fx + radius * mr;
     }
 
-    public float getMinFx(){
+    public float getMinFx() {
         return this.fx - radius * mr;
     }
 
-    public float getMaxFy(){
-        return this.fy + mr *radius;
+    public float getMaxFy() {
+        return this.fy + mr * radius;
     }
 
-    public float getMinFy(){
+    public float getMinFy() {
         return this.fy - mr * radius;
     }
 
