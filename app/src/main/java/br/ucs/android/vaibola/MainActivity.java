@@ -72,9 +72,6 @@ public class MainActivity extends Activity {
 
             if (customCanvas.getCurrX() >= customCanvas.getMinFx() && customCanvas.getCurrX() <= customCanvas.getMaxFx()
                     && customCanvas.getCurrY() >= customCanvas.getMinFy() && customCanvas.getCurrY() <= customCanvas.getMaxFy()) {
-                customCanvas.setCurrX(100);
-                customCanvas.setCurrY(100);
-
                 customCanvas.setMatrixFase(nFase++);
                 vaiSom();
             }

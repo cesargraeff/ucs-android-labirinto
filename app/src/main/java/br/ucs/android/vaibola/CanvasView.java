@@ -11,17 +11,15 @@ import android.view.View;
 
 public class CanvasView extends View {
 
-    private int radius = 25;
-    private float mr = 1.5f;
-    private int[][] m;
-    private int l;
-    private int c;
-    private int fase;
+    private int radius = 25; //  raio da peolota
+    private float mr = 1.5f; // raio maximo usado para saida de nivel
+    private int[][] m; // matriz
+    private int l; // numero de linhas
+    private int c; // numero de colunas
+    private int fase; // fase atual
     Context context;
-    // Record current ball horizontal ordinate.
-    private float currX = 100;
-    // Record current ball vertical ordinate
-    private float currY = 100;
+    private float currX = 100; // pos atual x
+    private float currY = 100; // pos atual Y
 
     // This is the circle color.
     private int circleColor = Color.GREEN;
@@ -83,8 +81,11 @@ public class CanvasView extends View {
     }
 
     public void setMatrixFase(int fase) {
+        this.currX = (100);
+        this.currY = (100);
+
         this.fase = fase;
-        switch (fase){
+        switch (fase) {
             case 1:
                 this.clearM();
                 this.bord();
