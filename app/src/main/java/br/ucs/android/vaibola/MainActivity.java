@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
     private MediaPlayer mp;
     private boolean som;
     private Vibrator v;
+    private int nFase = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,7 @@ public class MainActivity extends Activity {
         customCanvas.setmX(point.x);
         customCanvas.setmY(point.y);
 
-        customCanvas.setF1();
-        customCanvas.setFase(1);
+        customCanvas.setMatrixFase(nFase++);
 
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
@@ -74,7 +74,8 @@ public class MainActivity extends Activity {
                     && customCanvas.getCurrY() >= customCanvas.getMinFy() && customCanvas.getCurrY() <= customCanvas.getMaxFy()) {
                 customCanvas.setCurrX(100);
                 customCanvas.setCurrY(100);
-                customCanvas.setFase(2);
+
+                customCanvas.setMatrixFase(nFase++);
                 vaiSom();
             }
 
@@ -96,9 +97,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        // TODO ARRUMAR ISSO, para forma de gente
-//        super.onBackPressed();
-        customCanvas.setFase(1);
+        this.nFase = 1;
+        customCanvas.setMatrixFase(nFase++);
     }
 
     private void vaiSom() {

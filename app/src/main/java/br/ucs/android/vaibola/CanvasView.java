@@ -51,8 +51,14 @@ public class CanvasView extends View {
                 break;
             case 2:
                 drawBord(canvas);
+                // TODO ADD LAYOUT FASE 2
+                break;
+            case 3:
+                drawBord(canvas);
+                // TODO ADD LAYOUT FASE 3
                 break;
             default:
+                drawBord(canvas);
         }
 
         Paint player = new Paint();
@@ -76,25 +82,43 @@ public class CanvasView extends View {
         canvas.drawText("Para reiniciar aperte voltar", 30, mY - 25, p3 );
     }
 
-    public void setF1() {
-        l = mY / 10;
-        c = mX / 10;
-        m = new int[l][c];
+    public void setMatrixFase(int fase) {
+        this.fase = fase;
+        switch (fase){
+            case 1:
+                this.clearM();
+                this.bord();
 
-        bord();
+                this.fx = (c - 5) * 10 - radius * mr;
+                this.fy = (l - 5) * 10 - radius * mr;
 
-        this.fx = (c - 5) * 10 - radius * mr;
-        this.fy = (l - 5) * 10 - radius * mr;
-
-        for (int i = 5; i < l - 15; i++) {
-            for (int j = 5; j < c - 15; j++) {
-                if (j % 40 == 0) {
-                    m[i][j] = 1;
-                    m[i][j + 1] = 1;
-                    m[i][j + 2] = 1;
+                for (int i = 5; i < l - 15; i++) {
+                    for (int j = 5; j < c - 15; j++) {
+                        if (j % 40 == 0) {
+                            m[i][j] = 1;
+                            m[i][j + 1] = 1;
+                            m[i][j + 2] = 1;
+                        }
+                    }
                 }
-            }
+                break;
+            case 2:
+                this.clearM();
+                this.bord();
+
+                // TODO ADD MATRIZ FASE 2
+                break;
+            case 3:
+                this.clearM();
+                this.bord();
+
+                // TODO ADD MATRIZ FASE 3
+                break;
+            default:
+                this.clearM();
+                this.bord();
         }
+
 
     }
 
@@ -214,10 +238,6 @@ public class CanvasView extends View {
         return currY;
     }
 
-    public void setFase(int fase) {
-        this.fase = fase;
-    }
-
     public float getMaxFx(){
         return this.fx + radius * mr;
     }
@@ -240,5 +260,17 @@ public class CanvasView extends View {
 
     public void setCurrY(float currY) {
         this.currY = currY;
+    }
+
+    public void clearM() {
+        l = mY / 10;
+        c = mX / 10;
+        m = new int[l][c];
+
+        for (int i = 0; i < this.l; i++) {
+            for (int j = 0; j < this.c; j++) {
+                this.m[i][j] = 0;
+            }
+        }
     }
 }
